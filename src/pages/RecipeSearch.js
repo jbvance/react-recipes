@@ -1,26 +1,23 @@
-import React, { useState } from 'react';
-import * as Yup from 'yup';
-import Card from '../components/common/Card';
+import React, { useContext, useState } from 'react';
+
 import GradientBar from '../components/common/GradientBar';
 import { publicFetch } from '../util/fetch';
 import FormError from '../components/common/FormError';
-import FormInput from '../components/FormInput';
 import FormSuccess from '../components/FormSuccess';
 import logo from './../images/logo.png';
 import GradientButton from '../components/common/GradientButton';
 import Label from '../components/common/Label';
 import Recipe from '../components/Recipe';
+import { AuthContext } from './../context/AuthContext';
 
 const RecipeSearch = () => {
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchSuccess, setSearchSuccess] = useState();
   const [searchError, setSearchError] = useState();
   const [hits, setHits] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('yes');
-
-  const SearchSchema = Yup.object().shape({
-    searchTerm: Yup.string().required('Please enter a search term'),
-  });
+  const [searchTerm, setSearchTerm] = useState();
+  const auth = useContext(AuthContext);
+  const isAuth = auth.isAuthenticated();
 
   const submitSearch = async (e) => {
     try {
@@ -30,8 +27,6 @@ const RecipeSearch = () => {
       const { data } = await publicFetch.get(`recipes/search`, {
         params,
       });
-
-      //authContext.setAuthState(data);
       console.log('DATA', data);
       setSearchSuccess(data.message);
       setSearchLoading(false);
@@ -49,8 +44,9 @@ const RecipeSearch = () => {
   };
 
   const renderRecipes = () => {
+    //console.log('AUTH', auth.isAuthenticated());
     return hits.map((hit) => (
-      <Recipe key={hit.recipe.uri} recipe={hit.recipe} />
+      <Recipe key={hit.recipe.uri} recipe={hit.recipe} showFavorite={isAuth} />
     ));
   };
 
@@ -69,22 +65,22 @@ const RecipeSearch = () => {
               </h2>
             </div>
 
-            <div>
+            <div className="container">
               <form>
                 {searchSuccess && <FormSuccess text={searchSuccess} />}
                 {searchError && <FormError text={searchError} />}
-                <div>                  
-                    <div>
-                      <Label text="Search" />
-                    </div>
-                    <input
-                      aria-label="Email"
-                      name="searchTerm"
-                      type="text"
-                      placeholder="Enter a search term"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    />                  
+                <div>
+                  <div>
+                    <Label text="Search" />
+                  </div>
+                  <input
+                    aria-label="Search"
+                    name="searchTerm"
+                    type="text"
+                    placeholder="Enter a search term"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
                 </div>
 
                 <div className="mt-6">
@@ -95,8 +91,8 @@ const RecipeSearch = () => {
                     onClick={submitSearch}
                   />
                 </div>
-                <div>
-                  {hits.length > 0 ? renderRecipes() : <div>No results</div>}
+                <div className="recipe-search-container">
+                  {hits.length > 0 && renderRecipes()}
                 </div>
               </form>
             </div>

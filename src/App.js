@@ -3,14 +3,17 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
-  Redirect
+  Redirect,
 } from 'react-router-dom';
+
+import { Provider as ReduxProvider } from 'react-redux';
+import { createStore, applyMiddleware, compose } from 'redux';
+import reduxThunk from 'redux-thunk';
+import reducers from './reducers';
+
 import './App.css';
 
-import {
-  AuthProvider,
-  AuthContext
-} from './context/AuthContext';
+import { AuthProvider, AuthContext } from './context/AuthContext';
 import { FetchProvider } from './context/FetchContext';
 
 import AppShell from './AppShell';
@@ -26,6 +29,19 @@ const Inventory = lazy(() => import('./pages/Inventory'));
 const Account = lazy(() => import('./pages/Account'));
 const Settings = lazy(() => import('./pages/Settings'));
 const Users = lazy(() => import('./pages/Users'));
+
+// required for redux devtools in browser
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(
+  reducers,
+  {
+    // initial state
+    favorites: [],
+  },
+  composeEnhancers(applyMiddleware(reduxThunk))
+);
+
+console.log('STORE', store.getState());
 
 const LoadingFallback = () => (
   <AppShell>
@@ -49,7 +65,7 @@ const UnauthenticatedRoutes = () => (
     </Route>
     <Route path="*">
       <FourOFour />
-    </Route>    
+    </Route>
   </Switch>
 );
 
@@ -114,15 +130,17 @@ const AppRoutes = () => {
 
 function App() {
   return (
-    <Router>
-      <AuthProvider>
-        <FetchProvider>
-          <div className="bg-gray-100">
-            <AppRoutes />
-          </div>
-        </FetchProvider>
-      </AuthProvider>
-    </Router>
+    <ReduxProvider store={store}>
+      <Router>
+        <AuthProvider>
+          <FetchProvider>
+            <div className="bg-gray-100">
+              <AppRoutes />
+            </div>
+          </FetchProvider>
+        </AuthProvider>
+      </Router>
+    </ReduxProvider>
   );
 }
 

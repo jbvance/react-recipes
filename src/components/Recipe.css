@@ -72,9 +72,11 @@
 }
 
 .recipe-text {
-  padding: .5rem;
+  display: flex;
+  flex-direction: column;
+  /* padding: .5rem;
   position: relative;    
-  height: 5rem;
+  height: 5rem; */
 }
 
 .recipe-text span {
@@ -83,7 +85,7 @@
 }
 
 .recipe-text__name {
-  font-weight: 700;
+  font-weight: 700; 
 }
 
 .recipe-text__time {
