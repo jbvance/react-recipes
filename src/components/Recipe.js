@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookmark } from '@fortawesome/free-solid-svg-icons';
+import { faBookmark, faHeart } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { numberWithCommas } from '../util';
 import './Recipe.css';
+import { setFavorite, removeFavorite } from '../actions';
+import { FetchContext } from '../context/FetchContext';
 
 // Get labels from recipes for things such as 'sugar concious', 'peanut-free', etc.
 function getHealthLabels(recipe) {
@@ -15,14 +17,17 @@ const Recipe = ({ recipe, showFavorite = false }) => {
   const dispatch = useDispatch();
   const favorites = useSelector((state) => state.favorites);
   const [isFavorite, setIsFavorite] = useState(false);
+  const fetchContext = useContext(FetchContext);
 
-  const toggleFavorite = () => {
+  const toggleFavorite = () => {    
     
     if (!isFavorite) {
-      dispatch({ type: 'add_favorite', payload: recipe }); 
+      dispatch(setFavorite(recipe, fetchContext))
+      //dispatch({ type: 'add_favorite', payload: recipe }); 
       setIsFavorite(true);       
     } else {
-      dispatch({ type: 'remove_favorite', payload: recipe.uri });
+      const favToDelete = favorites.find(fav => fav.uri === recipe.uri)              
+      dispatch(removeFavorite(favToDelete.uri, fetchContext))
       setIsFavorite(false);
     }
   };
@@ -54,9 +59,10 @@ const Recipe = ({ recipe, showFavorite = false }) => {
             <div>
               {showFavorite && (
                 <FontAwesomeIcon
-                  icon={faBookmark}
+                  icon={faHeart}
                   opacity={isFavorite ? '1' : '0.2'}
                   onClick={toggleFavorite}
+                  size="2x"
                 />
               )}
             </div>

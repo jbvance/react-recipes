@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-
+import React, { useContext, useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import GradientBar from '../components/common/GradientBar';
 import { publicFetch } from '../util/fetch';
 import FormError from '../components/common/FormError';
@@ -9,6 +9,8 @@ import GradientButton from '../components/common/GradientButton';
 import Label from '../components/common/Label';
 import Recipe from '../components/Recipe';
 import { AuthContext } from './../context/AuthContext';
+import { fetchFavorites } from '../actions';
+import { FetchContext } from '../context/FetchContext';
 
 const RecipeSearch = () => {
   const [searchLoading, setSearchLoading] = useState(false);
@@ -18,6 +20,12 @@ const RecipeSearch = () => {
   const [searchTerm, setSearchTerm] = useState();
   const auth = useContext(AuthContext);
   const isAuth = auth.isAuthenticated();
+  const dispatch = useDispatch();
+  const fetchContext = useContext(FetchContext);
+
+  useEffect(() => {
+    dispatch(fetchFavorites(fetchContext));
+  }, []);
 
   const submitSearch = async (e) => {
     try {
@@ -26,8 +34,7 @@ const RecipeSearch = () => {
       const params = { q: searchTerm };
       const { data } = await publicFetch.get(`recipes/search`, {
         params,
-      });
-      console.log('DATA', data);
+      });      
       setSearchSuccess(data.message);
       setSearchLoading(false);
       setSearchError(null);

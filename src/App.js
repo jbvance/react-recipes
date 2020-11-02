@@ -41,8 +41,6 @@ const store = createStore(
   composeEnhancers(applyMiddleware(reduxThunk))
 );
 
-console.log('STORE', store.getState());
-
 const LoadingFallback = () => (
   <AppShell>
     <div className="p-4">Loading...</div>
