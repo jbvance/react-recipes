@@ -1,13 +1,19 @@
-export default (state = [], action) => {  
+const initialState = { list: [], loading: false}
+export default (state = initialState, action) => {
   switch (action.type) {
     case 'add_favorite': {
-      return [...state, action.payload];
+      return {
+        ...state,
+        list: [...state.list, action.payload],
+      };
     }
     case 'remove_favorite':
-      console.log('URI TO DELETE', action.payload)
-      return state.filter(fav => fav.uri !== action.payload);
+      return {
+        ...state,
+        list: state.list.filter((fav) => fav.uri !== action.payload),
+      };
     case 'fetch_favorites':
-      return action.payload
+      return { ...state, list: action.payload};
     default:
       return state;
   }

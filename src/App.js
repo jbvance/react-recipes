@@ -23,6 +23,8 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import FourOFour from './pages/FourOFour';
 import RecipeSearch from './pages/RecipeSearch';
+import Favorites from './pages/Favorites';
+import Recipe from './pages/Recipe';
 
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Inventory = lazy(() => import('./pages/Inventory'));
@@ -36,7 +38,7 @@ const store = createStore(
   reducers,
   {
     // initial state
-    favorites: [],
+    //favorites: [],
   },
   composeEnhancers(applyMiddleware(reduxThunk))
 );
@@ -60,6 +62,9 @@ const UnauthenticatedRoutes = () => (
     </Route>
     <Route exact path="/recipes">
       <RecipeSearch />
+    </Route>   
+    <Route exact path="/recipes/:id">
+      <Recipe />
     </Route>
     <Route path="*">
       <FourOFour />
@@ -118,6 +123,9 @@ const AppRoutes = () => {
           </AuthenticatedRoute>
           <AuthenticatedRoute path="/users">
             <Users />
+          </AuthenticatedRoute>
+          <AuthenticatedRoute path="/favorites/:id">
+            <Favorites />
           </AuthenticatedRoute>
           <UnauthenticatedRoutes />
         </Switch>

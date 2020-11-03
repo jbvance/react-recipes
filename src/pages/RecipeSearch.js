@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import GradientBar from '../components/common/GradientBar';
 import { publicFetch } from '../util/fetch';
@@ -16,16 +17,17 @@ const RecipeSearch = () => {
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchSuccess, setSearchSuccess] = useState();
   const [searchError, setSearchError] = useState();
-  const [hits, setHits] = useState([]);
+  //const [hits, setHits] = useState([]);
   const [searchTerm, setSearchTerm] = useState();
   const auth = useContext(AuthContext);
   const isAuth = auth.isAuthenticated();
   const dispatch = useDispatch();
   const fetchContext = useContext(FetchContext);
+  const recipes = useSelector(state => state.recipes);
 
   useEffect(() => {
     dispatch(fetchFavorites(fetchContext));
-  }, []);
+  }, [dispatch, fetchContext]);
 
   const submitSearch = async (e) => {
     try {
@@ -34,12 +36,13 @@ const RecipeSearch = () => {
       const params = { q: searchTerm };
       const { data } = await publicFetch.get(`recipes/search`, {
         params,
-      });      
+      });
       setSearchSuccess(data.message);
       setSearchLoading(false);
       setSearchError(null);
       if (data.hits.length > 0) {
-        setHits(data.hits);
+        dispatch({ type: 'set_recipes', payload: data.hits})
+        //setHits(data.hits);
       }
     } catch (error) {
       console.error(error);
@@ -50,11 +53,15 @@ const RecipeSearch = () => {
     }
   };
 
-  const renderRecipes = () => {
-    //console.log('AUTH', auth.isAuthenticated());
-    return hits.map((hit) => (
-      <Recipe key={hit.recipe.uri} recipe={hit.recipe} showFavorite={isAuth} />
-    ));
+  const renderRecipes = () => {    
+    return recipes.map((hit) => {      
+      const uri = encodeURIComponent(hit.recipe.uri);         
+      return (
+        <Link key={uri} to={`/recipes/${uri}`}>
+          <Recipe recipe={hit.recipe} showFavorite={isAuth} />
+        </Link>
+      );
+    });
   };
 
   return (
@@ -99,7 +106,7 @@ const RecipeSearch = () => {
                   />
                 </div>
                 <div className="recipe-search-container">
-                  {hits.length > 0 && renderRecipes()}
+                  {recipes.length > 0 && renderRecipes()}
                 </div>
               </form>
             </div>

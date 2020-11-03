@@ -1,5 +1,3 @@
-import { useContext } from 'react';
-
 export const setFavorite = (recipe, fetchContext) => async (dispatch) => {
   try {   
     await fetchContext.authAxios.post('/favorites', {

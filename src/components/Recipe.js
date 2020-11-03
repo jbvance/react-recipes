@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookmark, faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { numberWithCommas } from '../util';
 import './Recipe.css';
@@ -16,25 +16,22 @@ function getHealthLabels(recipe) {
 const Recipe = ({ recipe, showFavorite = false }) => {
   const dispatch = useDispatch();
   const favorites = useSelector((state) => state.favorites);
-  const [isFavorite, setIsFavorite] = useState(false);
-  const fetchContext = useContext(FetchContext);
+  const fetchContext = useContext(FetchContext);   
 
-  const toggleFavorite = () => {    
-    
+  const isFavorite = favorites.findIndex((fav) => fav.uri === recipe.uri) > -1;
+
+  const toggleFavorite = async () => {
     if (!isFavorite) {
-      dispatch(setFavorite(recipe, fetchContext))
-      //dispatch({ type: 'add_favorite', payload: recipe }); 
-      setIsFavorite(true);       
+      dispatch(setFavorite(recipe, fetchContext));
     } else {
-      const favToDelete = favorites.find(fav => fav.uri === recipe.uri)              
-      dispatch(removeFavorite(favToDelete.uri, fetchContext))
-      setIsFavorite(false);
+      const favToDelete = favorites.find((fav) => fav.uri === recipe.uri);
+      try {
+        await dispatch(removeFavorite(favToDelete.uri, fetchContext));
+      } catch (err) {
+        console.log('Error deleting favorite', err.message);
+      }
     }
   };
-
-  useEffect(() => {
-    setIsFavorite(favorites.findIndex((fav) => fav.uri === recipe.uri) > -1);
-  }, []);
 
   return (
     <div className="col-4">
@@ -42,9 +39,9 @@ const Recipe = ({ recipe, showFavorite = false }) => {
         <img className="card__picture" src={recipe.image} alt={recipe.label} />
         <div className="recipe-text">
           <div style={{ alignSelf: 'center', padding: ' 0 5 0 5' }}>
-            <a href={recipe.url} target="_blank">
-              <span className="recipe-text__name">{recipe.label}</span>
-            </a>
+            {/* <a href={recipe.url} target="_blank"> */}
+            <span className="recipe-text__name">{recipe.label}</span>
+            {/* </a> */}
           </div>
           <div
             style={{
@@ -77,9 +74,9 @@ const Recipe = ({ recipe, showFavorite = false }) => {
             {getHealthLabels(recipe)}
           </div>
           <div className="recipe-box__link">
-            <a href={recipe.url} target="_blank" className="btn btn--green">
+            {/* <a href={recipe.url} target="_blank" className="btn btn--green">
               View Recipe
-            </a>
+            </a> */}
           </div>
         </div>
       </div>
