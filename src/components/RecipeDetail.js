@@ -1,8 +1,15 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import {
+  faCircleNotch,
+  faPlusCircle,
+  faMinusCircle,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { setFavorite, removeFavorite, fetchFavorites } from '../actions';
 import { FetchContext } from '../context/FetchContext';
-
+import { numberWithCommas } from '../util';
+import FavoritesButton from './common/FavoritesButton';
 import './RecipeDetail.css';
 
 const renderIngredients = (ingredients) => {
@@ -23,16 +30,13 @@ const renderDigest = (digest) => {
 
 const RecipeDetail = ({ recipe }) => {
   const favorites = useSelector((state) => state.favorites.list);
-  console.log('FAV', favorites);
   const isFavorite = favorites.findIndex((fav) => fav.uri === recipe.uri) > -1;
   const [saving, setIsSaving] = useState(false);
   const dispatch = useDispatch();
   const fetchContext = useContext(FetchContext);
-  console.log(recipe);
 
   useEffect(() => {
     if (!favorites || favorites.length === 0) {
-      console.log('GOING');
       dispatch(fetchFavorites(fetchContext));
     }
   }, []);
@@ -64,26 +68,32 @@ const RecipeDetail = ({ recipe }) => {
             <h3>{recipe.label}</h3>
             <div className="recipe-detail__title_detail">
               <div className="recipe-detail__title_item">
-                {parseInt(recipe.calories)} calories
+                {numberWithCommas(parseInt(recipe.calories))} calories
               </div>
               <div className="recipe-detail__title_item">
                 Preparation Time: {recipe.totalTime} Min.
               </div>
               <div className="recipe-detail__title_item">
-                See the full recipe at{' '}
                 <a href={recipe.url} target="_blank" rel="noopener noreferrer">
-                  {recipe.source}
+                  See the full recipe at {recipe.source}
                 </a>
               </div>
             </div>
             <div>
-              <button className="btn-fav" onClick={toggleFavorite}>
-                {saving
-                  ? '...Saving'
-                  : isFavorite
-                  ? 'Remove From Favorites'
-                  : 'Add to Favorites'}
-              </button>
+              <FavoritesButton
+                onToggleFavorite={toggleFavorite}
+                
+                icon={
+                  saving
+                    ? faCircleNotch
+                    : isFavorite
+                    ? faMinusCircle
+                    : faPlusCircle
+                }
+                text={
+                  saving ? 'Saving' : isFavorite ? 'Remove from favorites' : 'Add to favorites'
+                }
+              />             
             </div>
           </div>
         </div>

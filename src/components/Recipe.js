@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { numberWithCommas } from '../util';
-import './Recipe.css';
 import { setFavorite, removeFavorite } from '../actions';
 import { FetchContext } from '../context/FetchContext';
+import './Recipe.css';
 
 // Get labels from recipes for things such as 'sugar concious', 'peanut-free', etc.
 function getHealthLabels(recipe) {
@@ -15,18 +16,20 @@ function getHealthLabels(recipe) {
 
 const Recipe = ({ recipe, showFavorite = false }) => {
   const dispatch = useDispatch();
-  const favorites = useSelector((state) => state.favorites);
-  const fetchContext = useContext(FetchContext);   
+  const favorites = useSelector((state) => state.favorites.list);
+  const fetchContext = useContext(FetchContext);
 
   const isFavorite = favorites.findIndex((fav) => fav.uri === recipe.uri) > -1;
+  const uri = encodeURIComponent(recipe.uri);
 
-  const toggleFavorite = async () => {
+  const toggleFavorite = async (e) => {
+    console.log(e);
     if (!isFavorite) {
       dispatch(setFavorite(recipe, fetchContext));
     } else {
       const favToDelete = favorites.find((fav) => fav.uri === recipe.uri);
       try {
-        await dispatch(removeFavorite(favToDelete.uri, fetchContext));
+        dispatch(removeFavorite(favToDelete.uri, fetchContext));
       } catch (err) {
         console.log('Error deleting favorite', err.message);
       }
@@ -42,6 +45,11 @@ const Recipe = ({ recipe, showFavorite = false }) => {
             {/* <a href={recipe.url} target="_blank"> */}
             <span className="recipe-text__name">{recipe.label}</span>
             {/* </a> */}
+          </div>
+          <div style={{ alignSelf: 'center', padding: ' 0 5 0 5' }}>
+            <Link key={uri} to={`/recipes/${uri}`}>
+              View Details
+            </Link>
           </div>
           <div
             style={{

@@ -8,12 +8,7 @@
   }
 }
 
-.btn-fav {
-  width: 200px;
-  background-color: rgb(22,141, 30);
-  color: white;
-  border-radius: 5px;
-}
+
 
 .recipe-detail {
   background-color: #ffffff;
@@ -44,6 +39,12 @@
   flex-direction: column;
   border: 1px solid black;
   border-radius: 10px;
+  padding: 10px;
+}
+
+.recipe-detail__title a {
+  font-weight: 600;
+  color: rgb(22,141, 30);
 }
 
 .recipe-detail__title h3 {

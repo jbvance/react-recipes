@@ -67,9 +67,9 @@
 }
 
 
-.recipe-box:hover {
+/* .recipe-box:hover {
   transform: translateY(-.5rem) scale(1.03);
-}
+} */
 
 .recipe-text {
   display: flex;

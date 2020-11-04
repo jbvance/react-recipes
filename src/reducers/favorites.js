@@ -1,4 +1,4 @@
-const initialState = { list: [], loading: false}
+const initialState = { list: [], loading: false, error: null };
 export default (state = initialState, action) => {
   switch (action.type) {
     case 'add_favorite': {
@@ -13,7 +13,9 @@ export default (state = initialState, action) => {
         list: state.list.filter((fav) => fav.uri !== action.payload),
       };
     case 'fetch_favorites':
-      return { ...state, list: action.payload};
+      return { ...state, list: action.payload };
+    case 'set_favorite_error':
+      return { ...state, error: action.payload };
     default:
       return state;
   }

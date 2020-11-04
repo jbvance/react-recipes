@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import GradientBar from '../components/common/GradientBar';
 import { publicFetch } from '../util/fetch';
@@ -23,7 +22,7 @@ const RecipeSearch = () => {
   const isAuth = auth.isAuthenticated();
   const dispatch = useDispatch();
   const fetchContext = useContext(FetchContext);
-  const recipes = useSelector(state => state.recipes);
+  const recipes = useSelector((state) => state.recipes);
 
   useEffect(() => {
     dispatch(fetchFavorites(fetchContext));
@@ -41,7 +40,7 @@ const RecipeSearch = () => {
       setSearchLoading(false);
       setSearchError(null);
       if (data.hits.length > 0) {
-        dispatch({ type: 'set_recipes', payload: data.hits})
+        dispatch({ type: 'set_recipes', payload: data.hits });
         //setHits(data.hits);
       }
     } catch (error) {
@@ -53,13 +52,17 @@ const RecipeSearch = () => {
     }
   };
 
-  const renderRecipes = () => {    
-    return recipes.map((hit) => {      
-      const uri = encodeURIComponent(hit.recipe.uri);         
+  const onRecipeClicked =  e => {
+    console.log(e);
+  }
+
+  const renderRecipes = () => {
+    return recipes.map((hit) => {
+      const uri = encodeURIComponent(hit.recipe.uri);
       return (
-        <Link key={uri} to={`/recipes/${uri}`}>
+        // <Link key={uri} to={`/recipes/${uri}`} onClick={onRecipeClicked}>
           <Recipe recipe={hit.recipe} showFavorite={isAuth} />
-        </Link>
+        // </Link>
       );
     });
   };
@@ -96,19 +99,19 @@ const RecipeSearch = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
-
-                <div className="mt-6">
-                  <GradientButton
-                    type="submit"
-                    text="Search"
-                    loading={searchLoading}
-                    onClick={submitSearch}
-                  />
-                </div>
-                <div className="recipe-search-container">
-                  {recipes.length > 0 && renderRecipes()}
-                </div>
               </form>
+
+              <div className="mt-6">
+                <GradientButton
+                  type="submit"
+                  text="Search"
+                  loading={searchLoading}
+                  onClick={submitSearch}
+                />
+              </div>
+              <div className="recipe-search-container">
+                {recipes.length > 0 && renderRecipes()}
+              </div>
             </div>
           </div>
         </div>
