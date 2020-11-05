@@ -11,6 +11,7 @@ import Recipe from '../components/Recipe';
 import { AuthContext } from './../context/AuthContext';
 import { fetchFavorites } from '../actions';
 import { FetchContext } from '../context/FetchContext';
+import LoadingSpinner from '../components/common/LoadingSpinner';
 
 const RecipeSearch = () => {
   const [searchLoading, setSearchLoading] = useState(false);
@@ -106,7 +107,8 @@ const RecipeSearch = () => {
                 />
               </div>
               <div className="recipe-search-container">
-                {recipes.length > 0 && renderRecipes()}
+                { searchLoading && <LoadingSpinner text="Searching..."/>}
+                {!searchLoading && recipes.length > 0 && renderRecipes()}
               </div>
             </div>
           </div>

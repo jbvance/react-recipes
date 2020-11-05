@@ -15,13 +15,13 @@ export const NavBar = () => {
       <div className="main-nav">
         <div className="main-nav__link">{loggedIn && <AvatarDropdown />}</div>
         <div className="main-nav__link">
-          {' '}
-          {
-            <Link to="/">
+          {loggedIn && 
+          
+            <Link to="/favorites">
               <span>
                 <i className="fas fa-file-signature app-icon"></i>
               </span>
-              EstateDox
+              Favorites
             </Link>
           }
         </div>
