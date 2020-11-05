@@ -8,8 +8,7 @@ const Recipe = () => {
   const { id } = useParams();
   const [recipe, setRecipe] = useState(null);
   const [loading, setLoading] = useState(true);
-  const recipes = useSelector((state) => state.recipes);
-  //console.log(recipe);
+  const recipes = useSelector((state) => state.recipes);  
 
   useEffect(() => {
     const getRecipe = async () => {
@@ -27,8 +26,7 @@ const Recipe = () => {
         try {
           const { data } = await publicFetch.get(`recipes/search`, {
             params,
-          });
-          //console.log(data);
+          });         
           if (data && data.length > 0) {
             setRecipe(data[0]);
           }

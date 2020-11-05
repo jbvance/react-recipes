@@ -1,11 +1,9 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  faCircleNotch,
   faPlusCircle,
   faMinusCircle,
 } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { setFavorite, removeFavorite, fetchFavorites } from '../actions';
 import { FetchContext } from '../context/FetchContext';
 import { numberWithCommas } from '../util';
@@ -84,14 +82,12 @@ const RecipeDetail = ({ recipe }) => {
                 onToggleFavorite={toggleFavorite}
                 
                 icon={
-                  saving
-                    ? faCircleNotch
-                    : isFavorite
+                  isFavorite
                     ? faMinusCircle
                     : faPlusCircle
                 }
                 text={
-                  saving ? 'Saving' : isFavorite ? 'Remove from favorites' : 'Add to favorites'
+                  isFavorite ? 'Remove from favorites' : 'Add to favorites'
                 }
               />             
             </div>

@@ -22,8 +22,7 @@ const Recipe = ({ recipe, showFavorite = false }) => {
   const isFavorite = favorites.findIndex((fav) => fav.uri === recipe.uri) > -1;
   const uri = encodeURIComponent(recipe.uri);
 
-  const toggleFavorite = async (e) => {
-    console.log(e);
+  const toggleFavorite = async (e) => {   
     if (!isFavorite) {
       dispatch(setFavorite(recipe, fetchContext));
     } else {

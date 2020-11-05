@@ -52,16 +52,12 @@ const RecipeSearch = () => {
     }
   };
 
-  const onRecipeClicked =  e => {
-    console.log(e);
-  }
-
   const renderRecipes = () => {
     return recipes.map((hit) => {
       const uri = encodeURIComponent(hit.recipe.uri);
       return (
         // <Link key={uri} to={`/recipes/${uri}`} onClick={onRecipeClicked}>
-          <Recipe recipe={hit.recipe} showFavorite={isAuth} />
+          <Recipe key={uri} recipe={hit.recipe} showFavorite={isAuth} />
         // </Link>
       );
     });

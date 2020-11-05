@@ -25,6 +25,7 @@ import FourOFour from './pages/FourOFour';
 import RecipeSearch from './pages/RecipeSearch';
 import Favorites from './pages/Favorites';
 import Recipe from './pages/Recipe';
+import NavBar from './components/Navbar';
 
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Inventory = lazy(() => import('./pages/Inventory'));
@@ -60,9 +61,9 @@ const UnauthenticatedRoutes = () => (
     <Route exact path="/">
       <Home />
     </Route>
-    <Route exact path="/recipes">
+    <Route exact path="/recipes">     
       <RecipeSearch />
-    </Route>   
+    </Route>
     <Route exact path="/recipes/:id">
       <Recipe />
     </Route>
@@ -141,6 +142,7 @@ function App() {
         <AuthProvider>
           <FetchProvider>
             <div className="bg-gray-100">
+              <NavBar />
               <AppRoutes />
             </div>
           </FetchProvider>

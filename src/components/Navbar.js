@@ -1,31 +1,51 @@
-import React from 'react';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useContext } from 'react';
+import './NavBar.css';
+import { Link } from 'react-router-dom';
 import AvatarDropdown from './AvatarDropdown';
+import { faUtensils } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { AuthContext } from './../context/AuthContext';
 
-const SearchInput = () => (
-  <div className="flex">
-    <input
-      className="py-2 px-4 border bg-gray-100 border-gray-300 rounded-full focus:outline-none w-32 sm:w-64"
-      placeholder="Search"
-    />
-    <button className="rounded-full bg-gradient px-4 ml-2 text-white flex items-center text-xs focus:outline-none shadow-lg">
-      <FontAwesomeIcon icon={faArrowRight} />
-    </button>
-  </div>
-);
+export const NavBar = () => {
+  const auth = useContext(AuthContext);  
+  const loggedIn = auth.isAuthenticated();  
 
-const Navbar = () => {
+  const renderNavLinks = (props) => {
+    return (
+      <div className="main-nav">
+        <div className="main-nav__link">{loggedIn && <AvatarDropdown />}</div>
+        <div className="main-nav__link">
+          {' '}
+          {
+            <Link to="/">
+              <span>
+                <i className="fas fa-file-signature app-icon"></i>
+              </span>
+              EstateDox
+            </Link>
+          }
+        </div>
+        {!loggedIn && <Link to="/signup">Signup</Link>}
+        {!loggedIn && <Link to="/signin">Sign In</Link>}
+      </div>
+    );
+  };
+
   return (
-    <nav className="flex justify-between px-4">
-      <div className="">
-        <SearchInput />
-      </div>
-      <div className="">
-        <AvatarDropdown />
-      </div>
-    </nav>
+    <header className="header">
+      <h2 className="logo">
+        {
+          <Link to="/">
+            <span>
+            <FontAwesomeIcon style={{marginRight: '20px'}} icon={faUtensils} />
+            </span>
+            What's Cookin'?
+          </Link>
+        }
+      </h2>
+      {renderNavLinks()}
+    </header>
   );
 };
 
-export default Navbar;
+export default NavBar;
