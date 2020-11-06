@@ -136,3 +136,13 @@
   .hidden {
     display: none;
   }
+
+  .fav-toggle:hover {
+    cursor: pointer;
+  }
+
+  .recipe-detail__link {
+    align-self: center;
+    padding: 0px 5px;
+    border: 1px solid green; 
+  }

@@ -1,16 +1,21 @@
 import React, { useContext } from 'react';
 import './NavBar.css';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import AvatarDropdown from './AvatarDropdown';
 import { faUtensils } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AuthContext } from './../context/AuthContext';
+import Searchbar from './Searchbar';
 
-export const NavBar = () => {
+export const NavBar = (props) => {
   const auth = useContext(AuthContext);  
-  const loggedIn = auth.isAuthenticated();  
-
-  const renderNavLinks = (props) => {
+  const loggedIn = auth.isAuthenticated(); 
+  
+  const onSearch = (term) => {
+    props.history.push(`/recipes/?term=${encodeURIComponent(term)}`)
+  }
+  
+  const renderNavLinks = () => {
     return (
       <div className="main-nav">
         <div className="main-nav__link">{loggedIn && <AvatarDropdown />}</div>
@@ -32,7 +37,7 @@ export const NavBar = () => {
   };
 
   return (
-    <header className="header">
+    <header className="header">    
       <h2 className="logo">
         {
           <Link to="/">
@@ -43,9 +48,10 @@ export const NavBar = () => {
           </Link>
         }
       </h2>
+      <Searchbar onSubmitSearch={onSearch}  />
       {renderNavLinks()}
     </header>
   );
 };
 
-export default NavBar;
+export default withRouter(NavBar);

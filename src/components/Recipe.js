@@ -45,7 +45,7 @@ const Recipe = ({ recipe, showFavorite = false }) => {
             <span className="recipe-text__name">{recipe.label}</span>
             {/* </a> */}
           </div>
-          <div style={{ alignSelf: 'center', padding: ' 0 5 0 5' }}>
+          <div className="recipe-detail__link">
             <Link key={uri} to={`/recipes/${uri}`}>
               View Details
             </Link>
@@ -60,13 +60,14 @@ const Recipe = ({ recipe, showFavorite = false }) => {
             }}
           >
             <div>{recipe.totalTime} minutes</div>
-            <div>
+            <div className="fav-toggle">
               {showFavorite && (
                 <FontAwesomeIcon
                   icon={faHeart}
                   opacity={isFavorite ? '1' : '0.2'}
                   onClick={toggleFavorite}
                   size="2x"
+                  title={isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
                 />
               )}
             </div>

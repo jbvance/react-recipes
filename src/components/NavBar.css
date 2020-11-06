@@ -1,11 +1,9 @@
 
 .main-nav {
   display: flex;
-  flex-direction: row;
-  margin-top: 5px;
-  align-items: center;  
-  flex: 1;
-  justify-content: flex-end;
+  flex-direction: row;  
+  align-items: center;   
+  justify-content: flex-end;  
 }
 
 .main-nav__link { 

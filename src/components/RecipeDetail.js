@@ -37,7 +37,7 @@ const RecipeDetail = ({ recipe }) => {
     if (!favorites || favorites.length === 0) {
       dispatch(fetchFavorites(fetchContext));
     }
-  }, []);
+  }, [dispatch, favorites, fetchContext]);
 
   const toggleFavorite = async () => {
     setIsSaving(true);
