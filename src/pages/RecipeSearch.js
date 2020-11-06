@@ -30,51 +30,63 @@ const RecipeSearch = (props) => {
   }
 
   const query = useQuery();
-  const term = query.get('term');
-  console.log(term);
+  const term = query.get('term'); 
 
   useEffect(() => {
+    setSearchTerm(term);
     dispatch(fetchFavorites(fetchContext));
   }, [dispatch, fetchContext]);
 
-  const getSearchResults = async (searchTerm) => {
-    try {
-      console.log('GOT HERE');
-      setSearchError(null);
-      setSearchLoading(true);
-      if (!searchTerm) {
-        setSearchError('Please enter a search term.');
-      }
-      const params = { q: searchTerm };
-      const { data } = await publicFetch.get(`recipes/search`, {
-        params,
-      });
-      setSearchSuccess(data.message);
-      setSearchLoading(false);
-      setSearchError(null);
-      if (data.hits.length > 0) {
-        dispatch({ type: 'set_recipes', payload: data.hits });
-      }
-    } catch (error) {
-      console.error(error);
-      const { data } = error.response;
-      setSearchError(data.message);
-      setSearchSuccess(null);
-    } finally {
-      setSearchLoading(false);
+  useEffect(() => {
+    if (term !== searchTerm) {
+      console.log('SEARCHING...', term)
+      setSearchTerm(term);
     }
-  };
+  });
+
+  useEffect(() => {
+    // If the search term hasn't changed, do nothing
+    if (!searchTerm) return;
+
+    const getSearchResults = async (searchTerm) => {
+      try {
+        console.log('GOT HERE');
+        setSearchError(null);
+        setSearchLoading(true);
+        if (!searchTerm) {
+          setSearchError('Please enter a search term.');
+          console.log('exiting')
+          return;
+        }
+        const params = { q: searchTerm };
+        const { data } = await publicFetch.get(`recipes/search`, {
+          params,
+        });
+        setSearchSuccess(data.message);
+        setSearchLoading(false);
+        setSearchError(null);
+        if (data.hits.length > 0) {
+          dispatch({ type: 'set_recipes', payload: data.hits });
+        }
+      } catch (error) {
+        console.error(error);
+        const { data } = error.response;
+        setSearchError(data.message);
+        setSearchSuccess(null);
+      } finally {
+        setSearchLoading(false);
+      }
+    };
+
+    getSearchResults(searchTerm);
+  }, [searchTerm]);
 
   const renderRecipes = () => {
     return recipes.map((hit) => {
       const uri = encodeURIComponent(hit.recipe.uri);
       return <Recipe key={uri} recipe={hit.recipe} showFavorite={isAuth} />;
-    });
+    });   
   };
-
-  if (!term) {
-    return null;
-  }
 
   return (
     <>
@@ -93,7 +105,11 @@ const RecipeSearch = (props) => {
 
             <div className="container">
               <div className="recipe-search-container">
-                {searchLoading && <LoadingSpinner text="Searching..." />}
+                {searchError && <div>{searchError}</div>}
+                {searchLoading && <LoadingSpinner text="Searching..." />} 
+                {searchTerm && !searchLoading &&  (
+                  <h2 style={{fontSize: 32, fontWeight: 800, marginBottom: '15px'}}>Results for "{searchTerm}"</h2>
+                )}               
                 {!searchLoading && recipes.length > 0 && renderRecipes()}
               </div>
             </div>
