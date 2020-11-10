@@ -16,6 +16,8 @@ export default (state = initialState, action) => {
       return { ...state, list: action.payload };
     case 'set_favorite_error':
       return { ...state, error: action.payload };
+    case 'set_favorites_loading':
+      return { ...state, loading: action.payload };
     default:
       return state;
   }

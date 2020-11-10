@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Searchbar.css';
 
-const Searchbar = ({ onSubmitSearch }) => {
+const Searchbar = ({ onSubmitSearch, placeholder="Search" }) => {
   const [term, setTerm] = useState('');
 
   const onSubmit = (e) => {
@@ -20,7 +20,7 @@ const Searchbar = ({ onSubmitSearch }) => {
       />
       <input
         className="search"
-        placeholder="Search recipes"
+        placeholder={placeholder}
         type="text"
         value={term}
         onChange={(e) => setTerm(e.target.value)}

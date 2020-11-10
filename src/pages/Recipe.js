@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { publicFetch } from '../util/fetch';
 import RecipeDetail from '../components/RecipeDetail';
+import LoadingSpinner from '../components/common/LoadingSpinner';
 
 const Recipe = () => {
   const { id } = useParams();
@@ -42,7 +43,7 @@ const Recipe = () => {
   }, [id, recipes]);
 
 
-  if (loading) return <div>...Loading</div>
+  if (loading) return <LoadingSpinner text="Loading Recipe" />
   return (
     <RecipeDetail recipe={recipe} />
     );

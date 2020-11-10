@@ -31,7 +31,7 @@ export const NavBar = (props) => {
           }
         </div>
         {!loggedIn && <Link to="/signup">Signup</Link>}
-        {!loggedIn && <Link to="/signin">Sign In</Link>}
+        {!loggedIn && <Link to="/login">Sign In</Link>}
       </div>
     );
   };
@@ -48,7 +48,7 @@ export const NavBar = (props) => {
           </Link>
         }
       </h2>
-      <Searchbar onSubmitSearch={onSearch}  />
+      <Searchbar onSubmitSearch={onSearch} placeholder="Search Recipes" />
       {renderNavLinks()}
     </header>
   );

@@ -14,6 +14,7 @@ export const setFavorite = (recipe, fetchContext) => async (dispatch) => {
 export const fetchFavorites = (fetchContext) => async (dispatch) => {
   try {
     dispatch({ type: 'set_favorite_error', payload: null });
+    dispatch({ type: 'set_favorites_loading', payload: true});
     const response = await fetchContext.authAxios.get('/favorites');
     dispatch({ type: 'fetch_favorites', payload: response.data });
   } catch (err) {
@@ -22,6 +23,8 @@ export const fetchFavorites = (fetchContext) => async (dispatch) => {
       type: 'set_favorite_error',
       payload: 'Unable to fetch favorites',
     });
+  } finally {
+    dispatch({ type: 'set_favorites_loading', payload: false});
   }
 };
 

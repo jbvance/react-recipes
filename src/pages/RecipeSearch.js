@@ -3,11 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import GradientBar from '../components/common/GradientBar';
 import { publicFetch } from '../util/fetch';
-import FormError from '../components/common/FormError';
-import FormSuccess from '../components/FormSuccess';
-import logo from './../images/logo.png';
-import GradientButton from '../components/common/GradientButton';
-import Label from '../components/common/Label';
 import Recipe from '../components/Recipe';
 import { AuthContext } from './../context/AuthContext';
 import { fetchFavorites } from '../actions';
@@ -38,8 +33,7 @@ const RecipeSearch = (props) => {
   }, [dispatch, fetchContext]);
 
   useEffect(() => {
-    if (term !== searchTerm) {
-      console.log('SEARCHING...', term)
+    if (term !== searchTerm) {    
       setSearchTerm(term);
     }
   });

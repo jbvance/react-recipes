@@ -125,6 +125,9 @@ const AppRoutes = () => {
           <AuthenticatedRoute path="/users">
             <Users />
           </AuthenticatedRoute>
+          <AuthenticatedRoute path="/favorites">
+            <Favorites />
+          </AuthenticatedRoute>
           <AuthenticatedRoute path="/favorites/:id">
             <Favorites />
           </AuthenticatedRoute>
