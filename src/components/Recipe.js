@@ -14,7 +14,7 @@ function getHealthLabels(recipe) {
   return recipe.healthLabels.map((item) => <div key={item}>{item}</div>);
 }
 
-const Recipe = ({ recipe, showFavorite = false }) => {
+const Recipe = ({ recipe, showFavorite = false }) => {  
   const dispatch = useDispatch();
   const favorites = useSelector((state) => state.favorites.list);
   const fetchContext = useContext(FetchContext);
@@ -81,11 +81,7 @@ const Recipe = ({ recipe, showFavorite = false }) => {
           <div className="recipe-box__health-labels">
             {getHealthLabels(recipe)}
           </div>
-          <div className="recipe-box__link">
-            {/* <a href={recipe.url} target="_blank" className="btn btn--green">
-              View Recipe
-            </a> */}
-          </div>
+          
         </div>
       </div>
     </div>

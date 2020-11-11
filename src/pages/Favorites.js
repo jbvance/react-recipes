@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext, useState, } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchFavorites, setFavorite } from '../actions';
 import { FetchContext } from '../context/FetchContext';
@@ -11,20 +11,24 @@ const Favorites = () => {
   const favorites = useSelector((state) => state.favorites);
   const [favsToShow, setFavsToShow] = useState([]);
   const error = favorites.error;
-  const favList = favorites.list;
   const loading = favorites.loading;
   const dispatch = useDispatch();
   const fetchContext = useContext(FetchContext);
   const auth = useContext(AuthContext);
   const isAuth = auth.isAuthenticated();
 
-  useEffect(() => {
-    if (!favList || favList.length === 0) {
+  const getFavs = () => {
+    if (!favorites.list || favorites.list.length === 0) {
       dispatch(fetchFavorites(fetchContext));
+      console.log(favorites);
     }
-  }, [dispatch, favList, fetchContext]);
+  };
 
   useEffect(() => {
+    getFavs();
+  }, []);
+
+  useEffect(() => {  
     if (favorites && favorites.list) {
       setFavsToShow(favorites.list);
     }
@@ -42,8 +46,8 @@ const Favorites = () => {
   };
 
   const filterFavorites = (searchTerm) => {
-    if (!searchTerm) {
-      setFavsToShow(favorites);
+    if (!searchTerm || searchTerm.trim() === '') {
+      setFavsToShow(favorites.list);
     }
     const filtered = favorites.list.filter((fav) =>
       fav.label.toUpperCase().includes(searchTerm.toUpperCase())
