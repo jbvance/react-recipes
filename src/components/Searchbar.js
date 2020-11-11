@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import './Searchbar.css';
 
-const Searchbar = ({ onSubmitSearch, placeholder="Search" }) => {
+const Searchbar = ({ onSubmitSearch, onChangeText, placeholder="Search" }) => {
   const [term, setTerm] = useState('');
+
+  const changeText = e => {
+    setTerm(e.target.value);
+    onChangeText && onChangeText(e.target.value);
+  }
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -23,7 +28,7 @@ const Searchbar = ({ onSubmitSearch, placeholder="Search" }) => {
         placeholder={placeholder}
         type="text"
         value={term}
-        onChange={(e) => setTerm(e.target.value)}
+        onChange={changeText}
       />
       <img
         className={`clear-icon${!term ? '_hidden' : ''}`}

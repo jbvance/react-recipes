@@ -43,3 +43,4 @@ export const removeFavorite = (uri, fetchContext) => async (dispatch) => {
     console.error(err);
   }
 };
+

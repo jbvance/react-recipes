@@ -30,21 +30,20 @@ const RecipeSearch = (props) => {
   useEffect(() => {
     setSearchTerm(term);
     dispatch(fetchFavorites(fetchContext));
-  }, [dispatch, fetchContext]);
+  }, [dispatch, fetchContext, term]);
 
   useEffect(() => {
     if (term !== searchTerm) {    
       setSearchTerm(term);
     }
-  });
+  }, [term, searchTerm]);
 
   useEffect(() => {
     // If the search term hasn't changed, do nothing
     if (!searchTerm) return;
 
     const getSearchResults = async (searchTerm) => {
-      try {
-        console.log('GOT HERE');
+      try {      
         setSearchError(null);
         setSearchLoading(true);
         if (!searchTerm) {
@@ -73,7 +72,7 @@ const RecipeSearch = (props) => {
     };
 
     getSearchResults(searchTerm);
-  }, [searchTerm]);
+  }, [searchTerm, dispatch]);
 
   const renderRecipes = () => {
     return recipes.map((hit) => {

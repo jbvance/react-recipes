@@ -1,13 +1,15 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchFavorites } from '../actions';
+import { fetchFavorites, setFavorite } from '../actions';
 import { FetchContext } from '../context/FetchContext';
 import { AuthContext } from './../context/AuthContext';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import Recipe from '../components/Recipe';
+import Searchbar from '../components/Searchbar';
 
 const Favorites = () => {
   const favorites = useSelector((state) => state.favorites);
+  const [favsToShow, setFavsToShow] = useState([]);
   const error = favorites.error;
   const favList = favorites.list;
   const loading = favorites.loading;
@@ -20,11 +22,17 @@ const Favorites = () => {
     if (!favList || favList.length === 0) {
       dispatch(fetchFavorites(fetchContext));
     }
-  }, []);
+  }, [dispatch, favList, fetchContext]);
+
+  useEffect(() => {
+    if (favorites && favorites.list) {
+      setFavsToShow(favorites.list);
+    }
+  }, [favorites]);
 
   const renderFavorites = (favs) => {
     if (!favs || favs.length === 0) {
-      return <div>You haven't saved any favorites yet!</div>;
+      return <div>No favorites found.</div>;
     } else {
       return favs.map((fav) => {
         const uri = encodeURIComponent(fav.uri);
@@ -33,8 +41,18 @@ const Favorites = () => {
     }
   };
 
+  const filterFavorites = (searchTerm) => {
+    if (!searchTerm) {
+      setFavsToShow(favorites);
+    }
+    const filtered = favorites.list.filter((fav) =>
+      fav.label.toUpperCase().includes(searchTerm.toUpperCase())
+    );
+    setFavsToShow(filtered);
+  };
+
   return (
-    <>
+    <div className="container">
       <h2
         style={{
           fontSize: 42,
@@ -45,10 +63,17 @@ const Favorites = () => {
       >
         Favorites
       </h2>
+      <div style={{ marginBottom: '20px' }}>
+        <Searchbar
+          onSubmitSearch={(e) => console.log(e)}
+          onChangeText={filterFavorites}
+          placeholder="Search Favorites"
+        />
+      </div>
       {error && <div>{error}</div>}
       {loading && <LoadingSpinner text="Loading..." />}
-      {!loading && renderFavorites(favList)}
-    </>
+      {!loading && renderFavorites(favsToShow)}
+    </div>
   );
 };
 
