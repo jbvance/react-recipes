@@ -1,9 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  faPlusCircle,
-  faMinusCircle,
-} from '@fortawesome/free-solid-svg-icons';
+import { faPlusCircle, faMinusCircle } from '@fortawesome/free-solid-svg-icons';
 import { setFavorite, removeFavorite, fetchFavorites } from '../actions';
 import { FetchContext } from '../context/FetchContext';
 import { numberWithCommas } from '../util';
@@ -26,7 +23,7 @@ const renderDigest = (digest) => {
   ));
 };
 
-const RecipeDetail = ({ recipe }) => {
+const RecipeDetail = ({ recipe, showFavButton }) => {
   const favorites = useSelector((state) => state.favorites.list);
   const isFavorite = favorites.findIndex((fav) => fav.uri === recipe.uri) > -1;
   const [saving, setIsSaving] = useState(false);
@@ -77,20 +74,17 @@ const RecipeDetail = ({ recipe }) => {
                 </a>
               </div>
             </div>
-            <div>
-              <FavoritesButton
-                onToggleFavorite={toggleFavorite}
-                
-                icon={
-                  isFavorite
-                    ? faMinusCircle
-                    : faPlusCircle
-                }
-                text={
-                  isFavorite ? 'Remove from favorites' : 'Add to favorites'
-                }
-              />             
-            </div>
+            {showFavButton && (
+              <div>
+                <FavoritesButton
+                  onToggleFavorite={toggleFavorite}
+                  icon={isFavorite ? faMinusCircle : faPlusCircle}
+                  text={
+                    isFavorite ? 'Remove from favorites' : 'Add to favorites'
+                  }
+                />
+              </div>
+            )}
           </div>
         </div>
         <div className="recipe-info">

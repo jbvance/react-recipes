@@ -12,7 +12,6 @@ import { AuthContext } from '../context/AuthContext';
 import { publicFetch } from './../util/fetch';
 import { Redirect } from 'react-router-dom';
 import GradientButton from '../components/common/GradientButton';
-import logo from './../images/logo.png';
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().required('Email is required'),
@@ -59,10 +58,7 @@ const Login = () => {
         <Card>
           <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-md w-full">
-              <div>
-                <div className="w-32 m-auto mb-6">
-                  <img src={logo} alt="Logo" />
-                </div>
+              <div>               
                 <h2 className="mb-2 text-center text-3xl leading-9 font-extrabold text-gray-900">
                   Log in to your account
                 </h2>

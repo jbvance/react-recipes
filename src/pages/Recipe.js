@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { publicFetch } from '../util/fetch';
 import RecipeDetail from '../components/RecipeDetail';
 import LoadingSpinner from '../components/common/LoadingSpinner';
+import { AuthContext } from '../context/AuthContext';
 
 const Recipe = () => {
   const { id } = useParams();
   const [recipe, setRecipe] = useState(null);
   const [loading, setLoading] = useState(true);
   const recipes = useSelector((state) => state.recipes);  
+  const auth = useContext(AuthContext);
 
   useEffect(() => {
     const getRecipe = async () => {
@@ -45,7 +47,7 @@ const Recipe = () => {
 
   if (loading) return <LoadingSpinner text="Loading Recipe" />
   return (
-    <RecipeDetail recipe={recipe} />
+    <RecipeDetail recipe={recipe} showFavButton={auth.isAuthenticated()} />
     );
 };
 

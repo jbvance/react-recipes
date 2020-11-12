@@ -1,44 +1,53 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import Searchbar from '../components/Searchbar';
+import splash from '../images/splash.jpg';
 
-const Home = () => {
+const Home = ({ history }) => {
+  const onSearch = (term) => {
+    history.push(`/recipes/?term=${encodeURIComponent(term)}`);
+  };
+
   return (
     <div style={styles.main}>
-     <div style={styles.content}>
-       <h2 style={styles.header}>Search for a Recipe!</h2>
-      <div style={styles.search}>
-      <Searchbar />
+      <div style={styles.content}>
+        <h2 style={styles.header}>Search for a Recipe!</h2>
+        <div style={styles.search}>
+          <Searchbar onSubmitSearch={onSearch} placeholder="Search Recipes" />
+        </div>
       </div>
-     </div>
     </div>
   );
 };
 
 const styles = {
   header: {
-    fontSize: 50
+    fontSize: 50,
+    backgroundColor: 'green',
+    color: '#fff',
+    marginBottom: '20px',
+    padding: '5px 70px'
   },
   main: {
-    display: 'flex', 
-    height: '80vh',  
+    display: 'flex',
+    height: '100vh',
     minHeight: '300px',
-    border: '1px solid red',
-    flex: 1,      
+    flex: 1,
+    backgroundImage: `url(${splash})`,
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center center'
   },
   content: {
     display: 'flex',
     flex: 1,
-    border: '1px solid blue',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  search: {
-    border: '1px solid yellow',
+  search: {    
     width: '80%',
-  
-  }
-}
+  },
+};
 
-
-export default Home;
+export default withRouter(Home);
