@@ -32,15 +32,12 @@ const Inventory = lazy(() => import('./pages/Inventory'));
 const Account = lazy(() => import('./pages/Account'));
 const Settings = lazy(() => import('./pages/Settings'));
 const Users = lazy(() => import('./pages/Users'));
+const Home1 = lazy(() => import('./pages/Home1'));
 
 // required for redux devtools in browser
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
   reducers,
-  {
-    // initial state
-    //favorites: [],
-  },
   composeEnhancers(applyMiddleware(reduxThunk))
 );
 
@@ -59,9 +56,9 @@ const UnauthenticatedRoutes = () => (
       <Signup />
     </Route>
     <Route exact path="/">
-      <Home />
+      <Home1 />
     </Route>
-    <Route exact path="/recipes">     
+    <Route exact path="/recipes">
       <RecipeSearch />
     </Route>
     <Route exact path="/recipes/:id">
@@ -96,7 +93,9 @@ const AdminRoute = ({ children, ...rest }) => {
       {...rest}
       render={() =>
         auth.isAuthenticated() && auth.isAdmin() ? (
-          <AppShell>{children}</AppShell>
+          <AppShell>           
+            {children}
+          </AppShell>
         ) : (
           <Redirect to="/" />
         )

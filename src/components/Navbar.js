@@ -7,28 +7,27 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AuthContext } from './../context/AuthContext';
 import Searchbar from './Searchbar';
 
-export const NavBar = (props) => {
-  const auth = useContext(AuthContext);  
-  const loggedIn = auth.isAuthenticated(); 
-  
+export const NavBar = ({ history, showSearchBar = true }) => {
+  const auth = useContext(AuthContext);
+  const loggedIn = auth.isAuthenticated();
+
   const onSearch = (term) => {
-    props.history.push(`/recipes/?term=${encodeURIComponent(term)}`)
-  }
-  
+    history.push(`/recipes/?term=${encodeURIComponent(term)}`);
+  };
+
   const renderNavLinks = () => {
     return (
       <div className="main-nav">
         <div className="main-nav__link">{loggedIn && <AvatarDropdown />}</div>
         <div className="main-nav__link">
-          {loggedIn && 
-          
+          {loggedIn && (
             <Link to="/favorites">
               <span>
                 <i className="fas fa-file-signature app-icon"></i>
               </span>
               Favorites
             </Link>
-          }
+          )}
         </div>
         {!loggedIn && <Link to="/signup">Signup</Link>}
         {!loggedIn && <Link to="/login">Sign In</Link>}
@@ -37,18 +36,23 @@ export const NavBar = (props) => {
   };
 
   return (
-    <header className="header">    
+    <header className="header">
       <h2 className="logo">
         {
           <Link to="/">
             <span>
-            <FontAwesomeIcon style={{marginRight: '20px'}} icon={faUtensils} />
+              <FontAwesomeIcon
+                style={{ marginRight: '20px' }}
+                icon={faUtensils}
+              />
             </span>
             What's Cookin'?
           </Link>
         }
       </h2>
-      <Searchbar onSubmitSearch={onSearch} placeholder="Search Recipes" />
+      {showSearchBar && (
+        <Searchbar onSubmitSearch={onSearch} placeholder="Search Recipes" />
+      )}
       {renderNavLinks()}
     </header>
   );
