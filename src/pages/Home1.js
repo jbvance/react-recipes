@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import Searchbar from '../components/Searchbar';
-import splash from '../images/splash.jpg';
+import splash from '../images/splash-bottom.jpeg';
 
 const Home = ({ history }) => {
   const onSearch = (term) => {
@@ -30,7 +30,7 @@ const styles = {
   },
   main: {
     display: 'flex',
-    height: '100vh',
+    height: '90vh',
     minHeight: '300px',
     flex: 1,
     backgroundImage: `url(${splash})`,
@@ -39,11 +39,12 @@ const styles = {
     backgroundPosition: 'center center'
   },
   content: {
+    marginTop: '50px',
     display: 'flex',
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
+
   },
   search: {    
     width: '80%',

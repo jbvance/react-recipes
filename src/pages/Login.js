@@ -15,25 +15,20 @@ import GradientButton from '../components/common/GradientButton';
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().required('Email is required'),
-  password: Yup.string().required('Password is required')
+  password: Yup.string().required('Password is required'),
 });
 
 const Login = () => {
   const authContext = useContext(AuthContext);
   const [loginSuccess, setLoginSuccess] = useState();
   const [loginError, setLoginError] = useState();
-  const [redirectOnLogin, setRedirectOnLogin] = useState(
-    false
-  );
+  const [redirectOnLogin, setRedirectOnLogin] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
 
-  const submitCredentials = async credentials => {
+  const submitCredentials = async (credentials) => {
     try {
       setLoginLoading(true);
-      const { data } = await publicFetch.post(
-        `authenticate`,
-        credentials
-      );
+      const { data } = await publicFetch.post(`authenticate`, credentials);
 
       authContext.setAuthState(data);
       setLoginSuccess(data.message);
@@ -52,43 +47,34 @@ const Login = () => {
 
   return (
     <>
-      {redirectOnLogin && <Redirect to="/dashboard" />}
+      {redirectOnLogin && <Redirect to="/" />}
       <section className="w-full sm:w-1/2 h-screen m-auto p-8 sm:pt-10">
         <GradientBar />
         <Card>
           <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-md w-full">
-              <div>               
+              <div>
                 <h2 className="mb-2 text-center text-3xl leading-9 font-extrabold text-gray-900">
                   Log in to your account
                 </h2>
                 <p className="text-gray-600 text-center">
                   Don't have an account?{' '}
-                  <Hyperlink
-                    to="signup"
-                    text="Sign up now"
-                  />
+                  <Hyperlink to="signup" text="Sign up now" />
                 </p>
               </div>
 
               <Formik
                 initialValues={{
                   email: '',
-                  password: ''
+                  password: '',
                 }}
-                onSubmit={values =>
-                  submitCredentials(values)
-                }
+                onSubmit={(values) => submitCredentials(values)}
                 validationSchema={LoginSchema}
               >
                 {() => (
                   <Form className="mt-8">
-                    {loginSuccess && (
-                      <FormSuccess text={loginSuccess} />
-                    )}
-                    {loginError && (
-                      <FormError text={loginError} />
-                    )}
+                    {loginSuccess && <FormSuccess text={loginSuccess} />}
+                    {loginError && <FormError text={loginError} />}
                     <div>
                       <div className="mb-2">
                         <div className="mb-1">

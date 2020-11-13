@@ -11,7 +11,7 @@ const AppShell = ({ children }) => {
           <div className="px-4 sm:px-8 py-2 bg-gray-100">
             {children}
           </div>
-          <Footer />
+          {/* <Footer /> */}
         </div>
       </div>
     </>
